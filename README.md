@@ -77,11 +77,4 @@ Other modules from the complete project (not included here) involve:
 
 ---
 
-## Author
-
-Meissa Cherni  
-Software Engineering Student  
-
-
----
 
