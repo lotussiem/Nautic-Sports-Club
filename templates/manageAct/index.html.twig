@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Activities - Instructor Dashboard{% endblock %}
+
+{% block content %}
+<!-- Packages Start -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5 pb-3">
+            <div class="text-center mb-3 pb-3">
+                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Instructor Dashboard</h6>
+                <h1>Manage Activities</h1>
+            </div>
+            <div class="row">
+                {% for activity in activities %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="package-item bg-white mb-2">
+                            {% if activity.image %}
+                                <img class="img-fluid w-100" src="{{ vich_uploader_asset(activity, 'imageFile') }}" alt="{{ activity.name ?? 'Activity Image' }}" style="height: 250px; object-fit: cover; object-position: center;">
+                            {% else %}
+                                <img class="img-fluid w-100" src="{{ asset('img/placeholder.jpg') }}" alt="Placeholder" style="height: 250px; object-fit: cover; object-position: center;">
+                            {% endif %}
+                            <div class="p-4">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <small class="m-0"><i class="fa fa-map-marker-alt text-primary mr-2"></i>{{ activity.place ?? 'Unknown Place' }}</small>
+                                    <small class="m-0"><i class="fa fa-calendar-alt text-primary mr-2"></i>{{ activity.date ? activity.date|date('Y-m-d') : 'Not specified' }}</small>
+                                    <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>{{ activity.name ?? 'Unnamed Activity' }}</small>
+                                </div>
+                                <p class="h5">{{ activity.description ?? 'No description available.' }}</p>
+                                <div class="border-top mt-4 pt-4">
+                                    <div class="d-flex justify-content-between">
+                                        <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>Difficulty: {{ activity.difficulty ?? 'Not specified' }}</h6>
+                                        <h5 class="m-0">{{ activity.category ? activity.category.name : 'No Category' }}</h5>
+                                    </div>
+                                </div>
+                                <div class="mt-3 d-flex justify-content-between">
+                                    <a href="{{ path('activity_manage_detail', {'id': activity.id}) }}" class="btn btn-sm btn-primary">Update</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <p>No activities found.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Packages End -->
+{% endblock %}

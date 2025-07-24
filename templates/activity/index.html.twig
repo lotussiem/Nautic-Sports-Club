@@ -1,0 +1,521 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nautical Sports Activities{% endblock %}
+
+{% block content %}
+
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0">
+        <div id="header-carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="w-100" src="{{ asset('img/carousel-1.jpg') }}" alt="Image">
+                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                        <div class="p-3" style="max-width: 900px;">
+                            <h4 class="text-white text-uppercase mb-md-3">Tours and Travel</h4>
+                            <h1 class="display-3 text-white mb-md-4">Let's Discover The World Together</h1>
+                            <a href="#" class="btn btn-primary py-md-3 px-md-5 mt-2">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="w-100" src="{{ asset('img/carousel-2.jpg') }}" alt="Image">
+                    <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                        <div class="p-3" style="max-width: 900px;">
+                            <h4 class="text-white text-uppercase mb-md-3">Tours and Travel</h4>
+                            <h1 class="display-3 text-white mb-md-4">Discover Amazing Places With Us</h1>
+                            <a href="#" class="btn btn-primary py-md-3 px-md-5 mt-2">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+                <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                    <span class="carousel-control-prev-icon mb-n2"></span>
+                </div>
+            </a>
+            <a class="carousel-control-next" href="#header-carousel" data-slide="next">
+                <div class="btn btn-dark" style="width: 45px; height: 45px;">
+                    <span class="carousel-control-next-icon mb-n2"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+    <!-- About Start -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5">
+            <div class="row">
+                <div class="col-lg-6" style="min-height: 500px;">
+                    <div class="position-relative h-100">
+                        <img class="position-absolute w-100 h-100" src="{{ asset('img/about.jpg') }}" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 pt-5 pb-lg-5">
+                    <div class="about-text bg-white p-4 p-lg-5 my-lg-5">
+                        <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">About Us</h6>
+                        <h1 class="mb-3">We Provide Best Tour Packages In Your Budget</h1>
+                        <p>Dolores lorem lorem ipsum sit et ipsum. Sadip sea amet diam dolore sed et. Sit rebum labore sit sit ut vero no sit. Et elitr stet dolor sed sit et sed ipsum et kasd ut. Erat duo eos et erat sed diam duo</p>
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <img class="img-fluid" src="{{ asset('img/about-1.jpg') }}" alt="">
+                            </div>
+                            <div class="col-6">
+                                <img class="img-fluid" src="{{ asset('img/about-2.jpg') }}" alt="">
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-primary mt-1">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+    <!-- Category Start -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5 pb-3">
+            <div class="text-center mb-3 pb-3">
+                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Categories</h6>
+                <h1>Explore Our Available Sports Categories</h1>
+            </div>
+            <div class="row">
+                {% for category in categories %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <a href="{{ path('activity_public_index', {'category': category.id}) }}" class="destination-item position-relative d-block text-decoration-none {% if app.request.query.get('category') == "#{category.id}" %}destination-item-active{% endif %}" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                            <div class="destination-background" style="background-image: url('{% if category.image %}{{ vich_uploader_asset(category, 'imageFile') }}{% else %}{{ asset('img/placeholder.jpg') }}{% endif %}'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                                <div class="destination-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; opacity: 0.9;">
+                                    <h5 style="margin: 0; font-size: 1.5rem; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">{{ category.name|capitalize }}</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <p>No categories found.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Category End -->
+
+    <!-- Suggestion Search Start -->
+    <div class="container-fluid py-3">
+        <div class="container">
+            <div class="text-center mb-3">
+                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Search Activities</h6>
+            </div>
+            <div class="bg-light shadow" style="padding: 20px; border-radius: 8px;">
+                <form action="{{ path('activity_public_index') }}" method="get" id="search-form" autocomplete="off">
+                    <div class="row align-items-center">
+                        <div class="col-md-10 col-lg-8 mx-auto">
+                            <div class="mb-3">
+                                <input type="text"
+                                       id="search-input"
+                                       name="query"
+                                       value="{{ app.request.query.get('query') }}"
+                                       placeholder="Search activities..."
+                                       autocomplete="off"
+                                       class="form-control"
+                                       style="height: 47px; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2 mx-auto">
+                            <button class="btn btn-primary btn-block" type="submit" style="height: 47px; border-radius: 5px;">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Suggestion Search End -->
+
+    <!-- Filter Start -->
+    <div class="container-fluid py-3">
+        <div class="container">
+            <div class="bg-light shadow" style="padding: 20px; border-radius: 8px;">
+                <form action="{{ path('activity_public_index') }}" method="get">
+                    <div class="row align-items-center">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3 mb-md-0">
+                                        <select name="category" class="custom-select px-4" style="height: 47px; border-radius: 5px;">
+                                            <option value="all" {{ app.request.query.get('category') is null ? 'selected' : '' }}>All Categories</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}" {{ app.request.query.get('category') == "#{category.id}" ? 'selected' : '' }}>{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3 mb-md-0">
+                                        <select name="place" class="custom-select px-4" style="height: 47px; border-radius: 5px;">
+                                            <option value="all" {{ app.request.query.get('place') is null ? 'selected' : '' }}>All Places</option>
+                                            {% for place in places %}
+                                                <option value="{{ place }}" {{ app.request.query.get('place') == place ? 'selected' : '' }}>{{ place }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3 mb-md-0">
+                                        <select name="difficulty" class="custom-select px-4" style="height: 47px; border-radius: 5px;">
+                                            <option value="all" {{ app.request.query.get('difficulty') is null ? 'selected' : '' }}>All Difficulties</option>
+                                            {% for level in difficulties %}
+                                                <option value="{{ level }}" {{ app.request.query.get('difficulty') == "#{level}" ? 'selected' : '' }}>{{ level }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-block" type="submit" style="height: 47px; border-radius: 5px;">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Filter End -->
+
+    <!-- Activity Start -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5 pb-3">
+            <div class="text-center mb-3 pb-3">
+                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">
+                    {% if selectedCategory %}
+                        Activities in {{ selectedCategory.name }}
+                    {% else %}
+                        Our Activities
+                    {% endif %}
+                </h6>
+                <h1>
+                    {{ selectedCategory ? (selectedCategory.name ~ ' Activities') : 'Available Activities' }}
+                </h1>
+                {% if selectedCategory %}
+                    <a href="{{ path('activity_public_index') }}" class="btn btn-primary mt-2">Show All Activities</a>
+                {% endif %}
+            </div>
+            <div class="row pb-3">
+                {% for activity in activities %}
+                    <div class="col-lg-4 col-md-6 mb-4 pb-2">
+                        <a href="{{ path('activity_public_detail', {'id': activity.id}) }}" class="text-decoration-none">
+                            <div class="blog-item">
+                                <div class="position-relative">
+                                    {% if activity.image %}
+                                        <img class="img-fluid w-100" src="{{ vich_uploader_asset(activity, 'imageFile') }}" alt="{{ activity.name }}" style="height: 250px; object-fit: cover; object-position: center;">
+                                    {% else %}
+                                        <img class="img-fluid w-100" src="{{ asset('img/placeholder.jpg') }}" alt="Placeholder" style="height: 250px; object-fit: cover; object-position: center;">
+                                    {% endif %}
+                                    <div class="blog-date">
+                                        <h6 class="font-weight-bold mb-n1">{{ activity.difficulty|default('N/A') }}</h6>
+                                        <small class="text-white text-uppercase">
+                                            {% if activity.category %}
+                                                {{ activity.category.name }}
+                                            {% else %}
+                                                No Category
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-4">
+                                    <div class="d-flex mb-2">
+                                        <span class="text-primary text-uppercase text-decoration-none">View More Details</span>
+                                    </div>
+                                    <h5 class="m-0 text-dark">{{ activity.name }}</h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <p>No activities found{% if selectedCategory %} in {{ selectedCategory.name }}{% endif %}.</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Pagination Controls -->
+            <div class="text-center mt-4">
+                {{ knp_pagination_render(activities, null, {
+                    'previous_text': 'Previous',
+                    'next_text': 'Next',
+                    'page_range': 10,
+                    'template': '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig'
+                }) }}
+            </div>
+        </div>
+    </div>
+    <!-- Activity End -->
+
+    <!-- Map Section -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5 pb-3">
+            <div class="text-center mb-3 pb-3">
+                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Activity Locations</h6>
+                <h1>Explore Activity Locations on Map</h1>
+            </div>
+            <div id="map" style="height: 400px;"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript and styles -->
+    <style>
+        .ui-autocomplete {
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000 !important;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            list-style: none;
+            width: auto !important;
+        }
+
+        .ui-autocomplete .ui-menu-item {
+            padding: 10px 15px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            border: none !important;
+            outline: none !important;
+        }
+
+        .ui-autocomplete .ui-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .ui-autocomplete.ui-menu .ui-menu-item:hover,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-hover,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-active,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-focus {
+            background-color: rgb(58, 193, 89) !important;
+            color: #fff !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .ui-autocomplete.ui-menu .ui-menu-item .ui-menu-item-wrapper {
+            border: none !important;
+            outline: none !important;
+        }
+
+        .ui-autocomplete.ui-menu .ui-menu-item:hover .ui-menu-item-wrapper,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-hover .ui-menu-item-wrapper,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-active .ui-menu-item-wrapper,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-focus .ui-menu-item-wrapper {
+            background-color: rgb(58, 193, 89) !important;
+            color: #fff !important;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .ui-autocomplete.ui-menu .ui-menu-item:hover .ui-menu-item-wrapper .suggestion-name,
+        .ui-autocomplete.ui-menu .ui-menu-item:hover .ui-menu-item-wrapper .suggestion-description,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-hover .ui-menu-item-wrapper .suggestion-name,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-hover .ui-menu-item-wrapper .suggestion-description,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-active .ui-menu-item-wrapper .suggestion-name,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-active .ui-menu-item-wrapper .suggestion-description,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-focus .ui-menu-item-wrapper .suggestion-name,
+        .ui-autocomplete.ui-menu .ui-menu-item.ui-state-focus .ui-menu-item-wrapper .suggestion-description {
+            color: #fff !important;
+        }
+
+        .ui-autocomplete .ui-menu-item .suggestion-name {
+            font-weight: bold;
+        }
+
+        .ui-autocomplete .ui-menu-item .suggestion-description {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .destination-item-active {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .destination-item-active .destination-overlay {
+            background-color: rgba(0, 0, 0, 0.3);
+            opacity: 1;
+        }
+
+        .destination-item-active h5 {
+            transform: scale(1.1);
+            color: #f0f0f0;
+        }
+
+        /* Enhanced Pagination Styling */
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-item .page-link {
+            border-radius: 12px; /* Larger rounded corners */
+            padding: 12px 25px; /* Increased padding for bigger buttons */
+            font-size: 1.2rem; /* Larger font size */
+            font-weight: 600; /* Bolder text */
+            color: #333;
+            background-color: #fff;
+            border: 2px solid #dee2e6;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: rgb(58, 193, 89);
+            border-color: rgb(58, 193, 89);
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(58, 193, 89, 0.3); /* Enhanced shadow for active */
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #adb5bd;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            cursor: not-allowed;
+            opacity: 0.65; /* Faded effect for disabled */
+            box-shadow: none;
+        }
+
+        .pagination .page-item .page-link:hover:not(.disabled) {
+            background-color: rgb(58, 193, 89);
+            border-color: rgb(58, 193, 89);
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(58, 193, 89, 0.3); /* Enhanced hover shadow */
+        }
+
+        .pagination .page-item:first-child .page-link,
+        .pagination .page-item:last-child .page-link {
+            padding: 12px 30px; /* Slightly larger padding for Previous/Next */
+            font-weight: 700; /* Extra bold for navigation buttons */
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof jQuery === 'undefined') {
+                console.error('jQuery is not loaded. Please ensure jQuery is included in base.html.twig.');
+                return;
+            }
+
+            if (!jQuery.fn.autocomplete) {
+                console.error('jQuery UI Autocomplete is not loaded. Please ensure jQuery UI is included in base.html.twig.');
+                return;
+            }
+
+            console.log('Autocomplete script running');
+
+            const $searchInput = jQuery('#search-input');
+            if ($searchInput.length === 0) {
+                console.error('Search input element with ID "search-input" not found.');
+                return;
+            }
+
+            $searchInput.autocomplete({
+                delay: 50,
+                source: function(request, response) {
+                    console.log('Making AJAX request for query:', request.term);
+                    jQuery.ajax({
+                        url: "{{ path('activity_suggestions') }}",
+                        data: { query: request.term },
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log('AJAX response:', data);
+                            if (!Array.isArray(data)) {
+                                console.error('Expected an array from /activity/suggestions, got:', data);
+                                response([]);
+                                return;
+                            }
+                            const suggestions = data.map(item => {
+                                if (!item.id || !item.name) {
+                                    console.warn('Invalid suggestion item:', item);
+                                    return null;
+                                }
+                                return {
+                                    label: item.name + (item.description ? ' - ' + item.description.slice(0, 50) + '...' : ''),
+                                    value: item.name,
+                                    id: item.id,
+                                    description: item.description ? item.description.slice(0, 50) + '...' : ''
+                                };
+                            }).filter(item => item !== null);
+                            console.log('Mapped suggestions:', suggestions);
+                            response(suggestions);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX error:', status, error, xhr.responseText);
+                            response([]);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    console.log('Suggestion selected:', ui.item);
+                    if (ui.item && ui.item.id) {
+                        window.location.href = "{{ path('activity_public_detail', {'id': 0}) }}".replace("0", ui.item.id);
+                    }
+                },
+                open: function() {
+                    console.log('Autocomplete dropdown opened');
+                },
+                close: function() {
+                    console.log('Autocomplete dropdown closed');
+                }
+            }).data('ui-autocomplete')._renderItem = function(ul, item) {
+                return jQuery('<li>')
+                    .addClass('ui-menu-item')
+                    .append(
+                        jQuery('<div>')
+                            .addClass('ui-menu-item-wrapper')
+                            .html(
+                                '<span class="suggestion-name">' + item.value + '</span>' +
+                                (item.description ? '<span class="suggestion-description"> - ' + item.description + '</span>' : '')
+                            )
+                    )
+                    .appendTo(ul);
+            };
+
+            // Leaflet Map Initialization
+            if (typeof L !== 'undefined' && document.getElementById('map')) {
+                var map = L.map('map').setView([0, 0], 2); // Default world view
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                var bounds = [];
+                {% for activity in activities %}
+                    {% if coordinates[activity.id] is defined and coordinates[activity.id].lat is not null %}
+                        var marker = L.marker([{{ coordinates[activity.id].lat }}, {{ coordinates[activity.id].lon }}])
+                            .addTo(map)
+                            .bindPopup('<b>{{ activity.name }}</b><br>Location: {{ activity.place }}');
+                        bounds.push([{{ coordinates[activity.id].lat }}, {{ coordinates[activity.id].lon }}]);
+                    {% endif %}
+                {% endfor %}
+                if (bounds.length > 0) {
+                    map.fitBounds(bounds);
+                }
+            } else {
+                console.error('Leaflet is not loaded or map element not found.');
+            }
+        });
+    </script>
+
+    <!-- Leaflet CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% endblock %}

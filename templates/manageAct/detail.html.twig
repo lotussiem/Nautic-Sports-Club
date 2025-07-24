@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ activity ? (activity.name ~ ' - Activity Details') : 'Activity Not Found' }}{% endblock %}
+
+{% block content %}
+    <!-- Packages Start -->
+    <div class="container-fluid py-5">
+        <div class="container pt-5 pb-3">
+            <div class="text-center mb-3 pb-3">
+                <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Activity Details</h6>
+                <h1>{{ activity.name ?? 'Unnamed Activity' }}</h1>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 mb-4">
+                    <div class="package-item bg-white mb-2 shadow-lg rounded-lg" style="min-height: 600px;">
+                        {{ form_start(form, {'attr': {'method': 'post', 'action': path('activity_manage_update', {'id': activity.id}), 'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                            <style>
+                                .package-item {
+                                    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                                }
+                                .package-item:hover {
+                                    transform: translateY(-5px);
+                                    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                                }
+                                .form-group {
+                                    margin-bottom: 1.5rem;
+                                }
+                                .form-control {
+                                    border-radius: 10px;
+                                    border: 2px solid #ced4da;
+                                    padding: 0.75rem 1rem;
+                                    font-size: 1rem;
+                                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                                }
+                                .form-control:focus {
+                                    border-color: #1E3A5F;
+                                    box-shadow: 0 0 10px rgba(30, 58, 95, 0.2);
+                                    outline: none;
+                                }
+                                .form-label {
+                                    font-weight: 600;
+                                    color: #1E3A5F;
+                                    margin-bottom: 0.5rem;
+                                    display: block;
+                                }
+                                textarea.form-control {
+                                    min-height: 100px;
+                                    resize: vertical;
+                                }
+                                .custom-select {
+                                    border-radius: 10px;
+                                    border: 2px solid #ced4da;
+                                    padding: 0.75rem 1rem;
+                                    font-size: 1rem;
+                                    appearance: none;
+                                    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='gray' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3e%3cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3e%3c/svg%3e") no-repeat right 0.75rem center;
+                                    background-size: 12px;
+                                    transition: border-color 0.3s ease;
+                                }
+                                .custom-select:focus {
+                                    border-color: rgb(42, 129, 40);
+                                    box-shadow: 0 0 10px rgba(30, 58, 95, 0.2);
+                                    outline: none;
+                                }
+                                .btn-primary {
+                                    background-color: rgb(42, 129, 40);
+                                    border-color: rgb(42, 129, 40);
+                                    padding: 0.75rem 1.5rem;
+                                    border-radius: 10px;
+                                    font-weight: 600;
+                                    transition: background-color 0.3s ease, transform 0.3s ease;
+                                }
+                                .btn-primary:hover {
+                                    background-color: rgb(24, 75, 23);
+                                    transform: translateY(-2px);
+                                }
+                                .invalid-feedback {
+                                    color: #dc3545;
+                                    font-size: 0.875rem;
+                                    display: block;
+                                    margin-top: 0.25rem;
+                                }
+                                .needs-validation .form-control:invalid, .needs-validation .custom-select:invalid {
+                                    border-color: #dc3545;
+                                    background-image: none;
+                                }
+                                .needs-validation .form-control:valid, .needs-validation .custom-select:valid {
+                                    border-color: #28a745;
+                                }
+                                .border-top {
+                                    border-top: 1px solid #dee2e6 !important;
+                                }
+                                img.img-fluid {
+                                    border-radius: 10px;
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                }
+                            </style>
+                            <div class="row g-0">
+                                <!-- Left Column: Image and Category -->
+                                <div class="col-md-6">
+                                    <div class="p-3">
+                                        {% if activity.image %}
+                                            <img class="img-fluid w-100 mb-3" src="{{ vich_uploader_asset(activity, 'imageFile') }}" alt="{{ activity.name ?? 'Activity Image' }}" style="object-fit: cover; object-position: center; height: 300px;">
+                                        {% else %}
+                                            <img class="img-fluid w-100 mb-3" src="{{ asset('img/placeholder.jpg') }}" alt="Placeholder" style="object-fit: cover; object-position: center; height: 300px;">
+                                        {% endif %}
+                                        {{ form_row(form.imageFile, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control'}}) }}
+                                        <div class="form-group mt-3">
+                                            {{ form_row(form.category, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'custom-select'}}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Right Column: Details -->
+                                <div class="col-md-6">
+                                    <div class="p-4">
+                                        <div class="form-group">
+                                            {{ form_row(form.name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control', 'placeholder': 'Enter activity name'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(form.place, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control', 'placeholder': 'Enter location'}}) }}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ form_row(form.description, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control', 'placeholder': 'Enter description'}}) }}
+                                        </div>
+                                        <div class="border-top mt-4 pt-4">
+                                            <div class="form-group">
+                                                {{ form_row(form.difficulty, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control', 'placeholder': 'Enter difficulty (1-5)'}}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-5 mb-4">
+                                <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                                <a href="{{ path('activity_manage') }}" class="btn btn-primary">Back</a>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Packages End -->
+{% endblock %}

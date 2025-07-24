@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    {% block css %}
+        <!-- Favicon -->
+        <link href="{{ asset('img/favicon.ico') }}" rel="icon">
+
+        <!-- Google Web Fonts -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> 
+
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="{{ asset('lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css') }}" rel="stylesheet" />
+
+        <!-- Customized Bootstrap Stylesheet -->
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+        <!-- jQuery UI CSS -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Sidebar Start -->
+    <div class="sidebar" style="position: fixed; top: 0; left: 0; width: 250px; height: 100vh; background-color: #343a40; padding-top: 20px; color: white;">
+        <h4 class="text-center mb-4" style="color: #ffffff;">Admin Panel</h4>
+        {% set menu = knp_menu_get('App\\Menu\\MenuBuilder::createMainMenu') %}
+        <ul {% if menu.childrenAttributes is defined %}class="{{ menu.childrenAttributes.class }}"{% endif %}>
+            {% for item in menu.children %}
+                <li {% if item.attributes is defined %}class="{{ item.attributes.class }}"{% endif %}>
+                    <a href="{{ item.uri ?? path(item.route ?? '') }}"
+                       {% if item.linkAttributes is defined %}
+                           {% for key, value in item.linkAttributes %}
+                               {{ key }}="{{ value }}"
+                           {% endfor %}
+                       {% endif %}>
+                        {% if item.getExtra('icon') %}
+                            <i class="{{ item.getExtra('icon') }}"></i>
+                        {% endif %}
+                        {{ item.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Sidebar End -->
+
+    <!-- Main Content Start -->
+    <div style="margin-left: 250px; padding: 20px;">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- Main Content End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/easing.min.js') }}"></script>
+    <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('js/moment.min.js') }}"></script>
+    <script src="{{ asset('js/moment-timezone.min.js') }}"></script>
+    <script src="{{ asset('js/tempusdominus.js') }}"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="{{ asset('js/jqBootstrapValidation.min.js') }}" defer></script>
+    <script src="{{ asset('js/contact.js') }}" defer></script>
+
+    <!-- Template Javascript -->
+    <script src="{{ asset('js/main.js') }}" defer></script>
+
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    {% block javascripts %}
+    {% endblock %}
+</body>
+</html>

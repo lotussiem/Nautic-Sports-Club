@@ -1,0 +1,122 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Categories Management Start -->
+<div class="container-fluid py-5">
+    <div class="container pt-5 pb-3">
+        <div class="text-center mb-5 pb-3">
+            <h6 class="text-primary text-uppercase" style="letter-spacing: 5px;">Category Management</h6>
+            <h1>Manage Categories</h1>
+        </div>
+
+        <!-- Add New Category Form -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Add New Category</h4>
+            </div>
+            <div class="card-body">
+                {% if newForm %}
+                    {{ form_start(newForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(newForm.name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control', 'placeholder': 'Enter category name'}}) }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(newForm.imageFile, {'label': 'Upload Image', 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Add Category</button>
+                        </div>
+                    {{ form_end(newForm) }}
+                {% else %}
+                    <p class="text-center text-muted">Form unavailable.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Edit Category Form (if editing) -->
+        {% if editForm and editCategoryId %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">Edit Category (ID: {{ editCategoryId }})</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(editForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form_row(editForm.name, {'label_attr': {'class': 'form-label'}, 'attr': {'class': 'form-control', 'placeholder': 'Enter category name'}}) }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {% if editForm.vars.data.image %}
+                                    <label class="form-label">Current Image</label><br>
+                                    <img src="{{ vich_uploader_asset(editForm.vars.data, 'imageFile') }}" alt="Current Image" style="max-height: 100px;"><br><br>
+                                {% endif %}
+                                {{ form_row(editForm.imageFile, {'label': 'Upload New Image (optional)', 'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-warning">Update Category</button>
+                            <a href="{{ path('admin_category_index') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    {{ form_end(editForm) }}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Categories Table -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Existing Categories</h4>
+            </div>
+            <div class="card-body">
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% endfor %}
+                {% if categories is empty %}
+                    <p class="text-center text-muted">No categories found.</p>
+                {% else %}
+                    <table class="table table-striped table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                                <tr>
+                                    <td>{{ category.id }}</td>
+                                    <td>{{ category.name }}</td>
+                                    <td>
+                                        {% if category.image %}
+                                            <img src="{{ vich_uploader_asset(category, 'imageFile') }}" alt="{{ category.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                        {% else %}
+                                            <span class="text-muted">No Image</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('admin_category_edit', {'id': category.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ path('admin_category_delete', {'id': category.id}) }}" method="post" style="display:inline;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete {{ category.name }}?');">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Categories Management End -->
+{% endblock %}
